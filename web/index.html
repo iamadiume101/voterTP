@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <link rel="icon" type ="image/png" sizes="32x32" href="images/favicon.png">
+        <title>Voters Choice</title>
+        <meta charset="UTF-8">
+        <meta name ="viewport" content="width=device-width, initial-scale=1.0">
+        <script src ="http://code.jquery.com/jquery.min.js"></script>
+         <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet"/>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                    var id = ' ';
+                    var buttonid = '';
+                    var Name = ' ';
+                    var Email = ' ';
+                    var Phone = ' ';
+                    var Party = ' ';
+                    
+                    
+                    var showVote = function(){
+                        $('#vote').show();
+                       
+                    };
+                    
+                    var hideVote = function (){
+                       $('#vote').hide();
+                       $('#cancel').hide();
+                    };
+                    
+                    var editFormShow = function(){
+                        $('#voteForm').show();
+                        $('#save').show();
+                        $('#delete').show();
+                    };
+                    
+                    var editFormHide = function(){
+                        $('#voteForm').hide();
+                        $('#save').hide();
+                        $('#delete').hide();
+                    };
+                // Go Grab data and place on the page
+                $.getJSON('./rs/amadi', getVote);
+                
+                
+                // Configure an On-Click Listener to Update the Form POST
+
+        $('#vote1').click(function () {
+                    $.ajax({
+                        url: "./rs/amadi",
+                        dataType: "json",
+                        contentType: 'application/json; charset=UTF-8',
+                        data: JSON.stringify({
+                            "Name": $("#Name").val(),
+                            "Email": $("#Email").val(), 
+                            "Phone": $("#Phone").val(),
+                            "Party": $("#Party").val()}),                        
+                        method: "post",
+                        success: getVote
+                    });
+                });
+            });
+            // Configure a Callback to Update the form GET
+            var getVote = function(id) {
+                $('#display').html('');                
+                $.getJSON("./rs/amadi/", function (data){
+                for (var i = 0; i < data.length; i++){
+                    $('#display').append('<h3>' 
+                        + data[i].id + '</h3><p>'
+                        + data[i].Name + '</p><p>'
+                        + data[i].Email + '</p><p>' 
+                        + data[i].Phone + '</p><p>' 
+                        + data[i].Party + '</p><button class="btn btn-default" onclick="doDelete('+ 
+                        data[i].id + ')">Delete</button><button class="btn btn-default" onclick="stageUpdate('+ 
+                        data[i].id + ')">Edit</button></p>'); 
+                $('#id').val(data[i].id);
+                $('#Name').val(data[i].Name);
+                $('#Email').val(data[i].Email);
+                $('#Phone').val(data[i].Phone);
+                $('#Party').val(data[i].Party);
+                    }
+                 });
+            };
+            // Perform a Deletion on the DB DELETE
+            var doDelete = function (id) {
+                $.ajax({
+                    url: "./rs/amadi/" + id,
+                    dataType: "json",
+                    contentType: 'application/json; charset=UTF-8',
+                    method: "delete",
+                    success: getVote
+                });
+            };
+            // Stage an Update on the DB PUT
+            var stageUpdate = function(id) {
+                $.getJSON('./rs/amadi/' + id, function(data) {                   
+                    $('#Name').val(data.Name);
+                    $('#Email').val(data.Email);
+                    $('#Phone').val(data.Phone);
+                    $('#Party').val(data.Party);
+                    $('#update').removeClass('invisible');                    
+                    $('#update').click(function () {
+                        $.ajax({
+                            url: "./rs/amadi/" + id,
+                            dataType: "json",
+                            contentType: 'application/json; charset=UTF-8',
+                            data: JSON.stringify({"Name": $("#Name").val(),
+                                "Email": $("#Email").val(),
+                                "Phone": $("#Phone").val(),
+                                "Party": $("#Party").val()}),
+                            method: "put",
+                            success: function (data) {
+                                getVote(data);
+                                $('#update').addClass('invisible');
+                            }
+                        });
+                    });
+                });
+            };
+         
+            
+            $("#vote").click (function(){
+                getVote(buttonid);
+                editFormHide(buttonid);
+            });
+           
+        </script>
+
+     
+   <style>
+         
+            body {
+                 background-image: url("images/nigeria.jpg");
+                 background-position: center;
+                 background-repeat: none;
+            }
+           #form{
+                padding-top: 100px;
+                margin-bottom: 30px;
+               
+            }
+ 
+  </style>
+
+    </head>
+    <body>
+            <header>           
+                <center><img src="images/coat.png" alt="Nigeria Coat of Arm"></center>
+            </header>
+
+            <form id="vote"><center>
+            <label for="name">Name: </label>
+            <input type="text" id="Name"><br><br>
+            
+            <label for="email">Email: </label>
+            <input type="text" id="Email"><br><br>
+            
+            <label for="phone">Phone: </label>
+            <input type="text" id="Phone"><br><br>
+                
+            <label for="party">Party: </label>
+            <input type="text" id="Party"><br><br>
+            </form>
+            <button id="vote1">Vote</button>
+            <button id="update" class="btn btn-default invisible">Update</button>      
+            <div id="display"></div>
+            </center>
+                
+    
+    </body>
+</html>
