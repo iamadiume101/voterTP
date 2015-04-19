@@ -46,6 +46,8 @@ import javax.ws.rs.Produces;
 
 @Path ("/amadi")
 public class amadi {
+    
+    //GET METHODS//
  /**
  *
  * @Return statments
@@ -56,6 +58,11 @@ public class amadi {
         String st = getResults("SELECT * FROM ama");
         return st;
     }
+ 
+ /**
+ *
+ * gets the id 
+ */
 
     @GET
     @Path("{id}")
