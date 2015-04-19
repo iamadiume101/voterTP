@@ -51,7 +51,6 @@ and open the template in the editor.
                 
                 
                 // Configure an On-Click Listener to Update the Form POST
-
         $('#vote1').click(function () {
                     $.ajax({
                         url: "./rs/amadi",
@@ -67,7 +66,7 @@ and open the template in the editor.
                     });
                 });
             });
-            // Configure a Callback to Update the form GET
+            // Configure a Callback to Update the form GET METHOD//
             var getVote = function(id) {
                 $('#display').html('');                
                 $.getJSON("./rs/amadi/", function (data){
@@ -98,7 +97,7 @@ and open the template in the editor.
                     success: getVote
                 });
             };
-            // Stage an Update on the DB PUT
+            // Stage an Update on the DB PUT METHOD//
             var stageUpdate = function(id) {
                 $.getJSON('./rs/amadi/' + id, function(data) {                   
                     $('#Name').val(data.Name);
@@ -125,7 +124,7 @@ and open the template in the editor.
                 });
             };
          
-            
+            //for vote//
             $("#vote").click (function(){
                 getVote(buttonid);
                 editFormHide(buttonid);
