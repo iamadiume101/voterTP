@@ -46,7 +46,10 @@ import javax.ws.rs.Produces;
 
 @Path ("/amadi")
 public class amadi {
-    
+ /**
+ *
+ * @Return statments
+ */
     @GET
     @Produces("application/json")
     public String doGet() {

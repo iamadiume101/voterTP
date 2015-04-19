@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 /**
  *
  * @author c0641055
+ * Connection to the amagroup database which give data to the ama table in the database.
  */
 public class Credentials {
     
