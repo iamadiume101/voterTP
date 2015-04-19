@@ -101,10 +101,11 @@ public class amadi {
         return xxx;
     }
     
+    
+    //POST METHOD//
     @POST
     @Consumes("application/json")
     public void doPost(String st) {
-        
         JsonParser parser = Json.createParser(new StringReader(st));
         Map<String, String> ad = new HashMap<>();
         String Name = "", value;
@@ -127,16 +128,13 @@ public class amadi {
             }
         }
         System.out.println(ad);
-       Name = ad.get("Name");
+        Name = ad.get("Name");
         String Email = ad.get("Email");
         String Phone = ad.get("Phone");
         String Party = ad.get("Party");
         doUpdate("INSERT INTO ama (Name, Email, Phone, Party) values ( ?, ?, ?,?)", Name, Email, Phone, Party);
-         //String st1 = getResults("SELECT * FROM ama");
-         //return st1;
-    
     }
-        
+        //doUpdate//
           private int doUpdate(String query, String... params) {
         int numChanges = 0;
         try (Connection conn = Credentials.getConnection()) {
@@ -150,7 +148,8 @@ public class amadi {
         }
         return numChanges;
     }
-          
+    
+    //PUT METHOD//
     @PUT
     @Path("{id}")
     @Consumes("application/json")
@@ -184,7 +183,7 @@ public class amadi {
     }
 
     
-      
+    //DELETE METHOD// 
     @DELETE
     @Path("{id}")
     public void doDelete(@PathParam("id") String id, String st) {
